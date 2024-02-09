@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
+import AppLogo from "@/components/AppLogo.vue";
 
 const checked = ref(false);
 
@@ -7,11 +8,8 @@ const checked = ref(false);
 
 <template>
   <div>
-    qsdqsd
+    <AppLogo />
     <Button label="Submit" />
   </div>
 </template>
 
-<style scoped>
-
-</style>
