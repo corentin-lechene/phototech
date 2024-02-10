@@ -31,7 +31,7 @@ const profiles = ref<Profile[]>([
 </script>
 
 <template>
-  <BaseHeader />
-<!-- todo continuer -->
+  <BaseHeader avatar/>
+
 </template>
 

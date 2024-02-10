@@ -9,7 +9,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/login",
         component: LoginPage
-    }
+    },
     // {
     //     path: "/register",
     //     component: () => import("@/views/RegisterPage.vue")
@@ -18,14 +18,14 @@ const routes: Array<RouteRecordRaw> = [
     //     path: "/onboarding",
     //     component: () => import("@/views/Onboarding.vue")
     // },
-    // {
-    //     path: "/profiles",
-    //     component: () => import("@/views/Profiles.vue")
-    // },
-    // {
-    //     path: "/galleries",
-    //     component: () => import("@/views/GalleriesPage.vue")
-    // },
+    {
+        path: "/profiles",
+        component: () => import("@/views/ProfilesPage.vue")
+    },
+    {
+        path: "/galleries",
+        component: () => import("@/views/GalleriesPage.vue")
+    },
     //{
     //     path: "/galleries/:galleryId",
     //     component: () => import("@/views/GalleryDetail.vue")
