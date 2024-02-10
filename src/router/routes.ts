@@ -10,10 +10,10 @@ const routes: Array<RouteRecordRaw> = [
         path: "/login",
         component: LoginPage
     },
-    // {
-    //     path: "/register",
-    //     component: () => import("@/views/RegisterPage.vue")
-    // },
+    {
+        path: "/register",
+        component: () => import("@/views/RegisterPage.vue")
+    },
     // {
     //     path: "/onboarding",
     //     component: () => import("@/views/Onboarding.vue")
