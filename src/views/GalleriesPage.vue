@@ -1,37 +1,26 @@
 <script lang="ts" setup>
-import {ref} from 'vue'
 import BaseHeader from "@/components/common/BaseHeader.vue";
-import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
+import PictureCard from "@/components/pictures/PictureCard.vue";
 
-//todo fetch profiles from server
-interface Profile {
-  id: string;
-  pseudo: string;
-  avatar: string;
-}
+//todo fetch galleries from server
 
-const profiles = ref<Profile[]>([
-  {
-    id: "1",
-    pseudo: "Corentin",
-    avatar: "https://randomuser.me/api/portraits/thumb/women/30.jpg"
-  },
-  {
-    id: "2",
-    pseudo: "Melissa",
-    avatar: "https://randomuser.me/api/portraits/thumb/women/31.jpg"
-  },
-  {
-    id: "3",
-    pseudo: "Abdallah",
-    avatar: "https://randomuser.me/api/portraits/thumb/women/32.jpg"
-  }
-]);
 
 </script>
 
 <template>
   <BaseHeader avatar/>
-
+  <div class="px-8 flex flex-column">
+    <h1 class="font-bold">Mes albums</h1>
+    <div class="flex flex-row flex-wrap gap-5">
+      <PictureCard
+          v-for="i in 10"
+          :key="i"
+          :image="`https://picsum.photos/536/35${i}`"
+          title="Melissa"
+          subtitle="2 photos"
+          @on-click="$router.push(`/galleries/${i}`)"
+      />
+    </div>
+  </div>
 </template>
 

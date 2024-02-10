@@ -26,10 +26,10 @@ const routes: Array<RouteRecordRaw> = [
         path: "/galleries",
         component: () => import("@/views/GalleriesPage.vue")
     },
-    //{
-    //     path: "/galleries/:galleryId",
-    //     component: () => import("@/views/GalleryDetail.vue")
-    // },
+    {
+        path: "/galleries/:galleryId",
+        component: () => import("@/views/GalleryDetailPage.vue")
+    },
 ];
 
 export default routes;
