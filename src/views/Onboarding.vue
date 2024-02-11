@@ -7,7 +7,7 @@ import {ref} from "vue";
 
 const openChoosePictureModal = ref(false);
 const imageChosen = ref('');
-const disabled = ref(true);
+const disabled = ref(true); // todo: mettre en enable si image et input remplis
 
 const handleImageChosen = (image: string) => {
   imageChosen.value = image;
@@ -17,7 +17,7 @@ const handleImageChosen = (image: string) => {
 </script>
 
 <template>
-  <BaseHeader :backButton="true" class="px-8"/>
+  <BaseHeader backButton class="px-8" @onBackButton="$router.push('/profiles')"/>
   <div class="flex flex-row h-full w-full fixed px-8">
   <!-- Div left -->
     <div class="h-full flex-grow-1 mt-6 pl-5 pr-2">
