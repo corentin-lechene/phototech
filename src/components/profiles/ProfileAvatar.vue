@@ -7,19 +7,28 @@ type color = "secondary" | "success" | "info" | "warning" | "help" | "danger" | 
 interface ProfileAvatarProps {
   image?: string;
   icon?: string;
+  iconSize?: string;
   color?: color | undefined;
   label?: string;
   mini?: boolean;
+  large?: boolean;
 }
 
 const props = defineProps<ProfileAvatarProps>();
 defineEmits(["onClick"]);
 
-const avatarSize = computed(() => props.mini
-    ? "h-3rem w-3rem"
-    : "h-7rem w-7rem"
-);
+const avatarSize = computed(() => {
+    if(props.large) {
+      return "h-13rem w-13rem";
 
+    } else {
+      return props.mini ? "h-3rem w-3rem" : "h-7rem w-7rem"
+    }
+});
+
+const iconSize = computed(() =>
+    props.large ? "font-size: 5.5rem" : "font-size: 1.5rem"
+);
 
 </script>
 
@@ -39,7 +48,7 @@ const avatarSize = computed(() => props.mini
         size="normal"
     >
       <template #icon>
-        <i :class="icon" style="font-size: 1.5rem"></i>
+        <i :class="icon" :style="iconSize"></i>
       </template>
     </Avatar>
     <span v-if="label" class="font-bold">{{ label }}</span>

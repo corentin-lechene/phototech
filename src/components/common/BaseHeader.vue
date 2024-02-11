@@ -12,7 +12,11 @@ interface BaseHeaderProps {
 }
 
 defineProps<BaseHeaderProps>();
-defineEmits(["onCloseButton", "onBackButton"]);
+const emit = defineEmits(["onCloseButton", "onBackButton"]);
+
+const onBackButtonClicked = () => {
+  emit('onBackButton');
+}
 
 //todo fetch current user
 const profile = ref({
@@ -52,7 +56,7 @@ function displayMenu(event: Event) {
   <div class="flex justify-content-between p-5 align-items-center">
     <AppLogo/>
     <Button v-if="closeButton" icon="pi pi-times" outlined rounded aria-label="Cancel"/>
-    <Button v-else-if="backButton" icon="pi pi-arrow-left" outlined rounded aria-label="Cancel"/>
+    <Button v-else-if="backButton" icon="pi pi-arrow-left" outlined rounded aria-label="Cancel" @click="onBackButtonClicked()"/>
     <ProfileAvatar
         v-else-if="avatar && profile"
         :image="profile.avatar"

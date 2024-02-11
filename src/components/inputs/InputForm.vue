@@ -8,6 +8,8 @@ interface Content{
 defineProps<Content>();
 
 const s = ref('');
+
+// todo v-model
 </script>
 
 <template>

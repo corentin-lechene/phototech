@@ -11,13 +11,13 @@ const routes: Array<RouteRecordRaw> = [
         component: LoginPage
     },
     {
+        path: "/onboarding",
+        component: () => import("@/views/Onboarding.vue")
+    },
+    {
         path: "/register",
         component: () => import("@/views/RegisterPage.vue")
     },
-    // {
-    //     path: "/onboarding",
-    //     component: () => import("@/views/Onboarding.vue")
-    // },
     {
         path: "/profiles",
         component: () => import("@/views/ProfilesPage.vue")
