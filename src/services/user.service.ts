@@ -2,6 +2,7 @@ import {FirestoreService} from "@/services/firestore.service";
 import {Profile} from "@/models/profile.model";
 import {User} from "@/models/user.model";
 import {Gallery} from "@/models/gallery.model";
+import {Picture} from "@/models";
 
 export class UserService {
     db: FirestoreService;
@@ -84,5 +85,20 @@ export class UserService {
             ...gallery,
             createdAt: new Date()
         });
+    }
+
+    async addPicture(userId: string, profileId: string, galleryId: string, picture: Partial<Picture>) {
+        return this.db.addDocument(`users/${userId}/profiles/${profileId}/galleries/${galleryId}/pictures`, {
+            ...picture,
+            createdAt: new Date()
+        });
+    }
+
+    deleteGallery(currentUserId: string, currentProfileId: string, galleryId: string) {
+        return this.db.deleteDocument(`users/${currentUserId}/profiles/${currentProfileId}/galleries/${galleryId}`);
+    }
+
+    deletePicture(currentUserId: string, currentProfileId: string, value: string, pictureId: string) {
+        return this.db.deleteDocument(`users/${currentUserId}/profiles/${currentProfileId}/galleries/${value}/pictures/${pictureId}`);
     }
 }

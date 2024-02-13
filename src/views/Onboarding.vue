@@ -1,17 +1,33 @@
 <script lang="ts" setup>
+import {computed, ref} from "vue";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import InputForm from "@/components/inputs/InputForm.vue";
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import ChoosePictureModal from "@/components/modal/ChoosePictureModal.vue";
-import {ref} from "vue";
+import {UserService} from "@/services/user.service";
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const openChoosePictureModal = ref(false);
 const imageChosen = ref('');
-const disabled = ref(true); // todo: mettre en enable si image et input remplis
+const pseudo = ref('Melissa'); //todo add v-model
+const disabled = computed(() => !pseudo.value?.trim() || !imageChosen.value);
 
 const handleImageChosen = (image: string) => {
   imageChosen.value = image;
   openChoosePictureModal.value = false;
+}
+
+function onSubmitNewProfile() {
+  const userService = new UserService();
+  userService
+      .addProfile('ahqdE9y0DOtU12THxfZD', {
+        pseudo: pseudo.value,
+        avatar: imageChosen.value
+      })
+      .then(() => router.replace('/profiles'))
+      .catch(console.error);
 }
 
 </script>
@@ -26,7 +42,7 @@ const handleImageChosen = (image: string) => {
         <p class="text-sm font-semibold" style="letter-spacing: 0.05em;">Vous y êtes presque.. Choisissez votre Nom et votre photo de profil pour continuer.</p>
         <Divider class="my-5"/>
         <InputForm placeholder="Nom du profil"/>
-        <Button :disabled="disabled" label="Confirmer" class="w-full h-3rem"/>
+        <Button :disabled="disabled" label="Confirmer" class="w-full h-3rem" @click="onSubmitNewProfile()"/>
 
       </div>
     </div>
@@ -59,7 +75,7 @@ const handleImageChosen = (image: string) => {
   </div>
 </template>
 
-<style >
+<style scoped>
   .style-modal {
     background-color: #202639;
     color: #ffffff;
