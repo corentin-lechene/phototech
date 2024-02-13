@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import router from "@/router";
+import {UserService} from "@/services/user.service";
 
 //todo définir les models
 interface Profile {
@@ -12,24 +13,17 @@ interface Profile {
 }
 
 //todo fetch profiles from server
-const profiles = ref<Profile[]>([
-  {
-    id: "1",
-    pseudo: "Corentin",
-    avatar: "https://randomuser.me/api/portraits/thumb/women/30.jpg"
-  },
-  {
-    id: "2",
-    pseudo: "Melissa",
-    avatar: "https://randomuser.me/api/portraits/thumb/women/31.jpg"
-  },
-  {
-    id: "3",
-    pseudo: "Abdallah",
-    avatar: "https://randomuser.me/api/portraits/thumb/women/32.jpg"
-  }
-]);
+const profiles = ref<Profile[]>();
+const currentUserId = ref("1")
 
+onMounted(async () => {
+  try {
+    const userService = new UserService();
+    userService.getProfilesByUserId()
+  } catch(e) {
+      console.error(e);
+  }
+})
 
 function setProfile(profile: Profile) {
   console.log("Use PhotoTech for profile: ", profile);
