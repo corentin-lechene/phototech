@@ -4,22 +4,16 @@ import BaseHeader from "@/components/common/BaseHeader.vue";
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import router from "@/router";
 import {UserService} from "@/services/user.service";
+import {Profile} from "@/models";
 
-//todo définir les models
-interface Profile {
-  id: string;
-  pseudo: string;
-  avatar: string;
-}
 
-//todo fetch profiles from server
 const profiles = ref<Profile[]>();
-const currentUserId = ref("1")
+const currentUserId = "ahqdE9y0DOtU12THxfZD";
 
 onMounted(async () => {
   try {
     const userService = new UserService();
-    userService.getProfilesByUserId()
+    profiles.value = await userService.getProfilesByUserId(currentUserId)
   } catch(e) {
       console.error(e);
   }
@@ -32,7 +26,7 @@ function setProfile(profile: Profile) {
 </script>
 
 <template>
-  <BaseHeader close-button @on-close-button="$router.back()" />
+  <BaseHeader close-button @on-close-button="$router.replace('/galleries')" />
   <div class="flex flex-column align-items-center justify-content-center">
     <h1 class="font-bold">Choisissez votre profil</h1>
     <p class="font-medium m-0" style="letter-spacing: 0.075em;">
