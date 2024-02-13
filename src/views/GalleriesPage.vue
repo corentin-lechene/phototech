@@ -24,6 +24,7 @@ function onCreateAlbum() {
       .addGallery(currentUserId, currentProfileId, {title: albumName.value})
       .then(() => fetchGalleries())
       .then(() => openCreateAlbumDialog.value = false)
+      .then(() => albumName.value = "")
       .catch(console.error);
 }
 
@@ -61,8 +62,8 @@ function deleteAlbum(galleryId: string) {
           @on-delete="deleteAlbum(gallery.id)"
       />
     </div>
-    <Dialog v-model:visible="openCreateAlbumDialog" :style="{ width: '25rem' }" header="Nouvel album" modal>
-      <div class="flex flex-column align-items-stretch gap-5">
+    <Dialog v-model:visible="openCreateAlbumDialog" :style="{ width: '25rem', backgroundColor: 'white !important' }" header="Nouvel album" modal>
+      <div class="flex flex-column align-items-stretch gap-5" style="background-color: white !important;">
         <InputText v-model="albumName" class="flex-auto" placeholder="Nom de l'album"/>
         <Button
             :disabled="!albumName.trim()"

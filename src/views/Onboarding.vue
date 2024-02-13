@@ -75,7 +75,7 @@ function onSubmitNewProfile() {
   </div>
 </template>
 
-<style >
+<style scoped>
   .style-modal {
     background-color: #202639;
     color: #ffffff;
