@@ -8,7 +8,7 @@ import {Profile} from "@/models";
 
 
 const profiles = ref<Profile[]>();
-const currentUserId = "ahqdE9y0DOtU12THxfZD";
+const currentUserId = "ahqdE9y0DOtU12THxfZD"; //todo get from store
 
 onMounted(async () => {
   try {

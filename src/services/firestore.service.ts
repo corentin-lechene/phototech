@@ -1,4 +1,4 @@
-import {collection, doc, Firestore, getDocs, getFirestore, setDoc, getDoc} from "firebase/firestore";
+import {collection, doc, Firestore, getDocs, getFirestore, setDoc, getDoc, deleteDoc} from "firebase/firestore";
 
 export class FirestoreService {
     db: Firestore;
@@ -20,5 +20,10 @@ export class FirestoreService {
         const collectionRef = collection(this.db, path);
         const newDocRef = doc(collectionRef);
         return setDoc(newDocRef, data);
+    }
+
+    deleteDocument(path: string) {
+        const docRef = doc(this.db, path);
+        return deleteDoc(docRef);
     }
 }
