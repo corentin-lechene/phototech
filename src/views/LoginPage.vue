@@ -27,6 +27,7 @@ function onClickedSignIn() {
       .catch((error) => {
         console.error("Erreur lors de la connexion" + error)
         messageErrorCredential.value = "Invalid Credentials";
+        password.value = '';
       })
 }
 
