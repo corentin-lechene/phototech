@@ -18,7 +18,7 @@ export class UserService {
         return this.db.addDocument("users", user);
     }
 
-    async getByUserId(userId: string): Promise<User> {
+    async getByUserId(userId: string): Promise<Required<User>> {
         const userSnap = await this.db.getDocument(`users/${userId}`);
         if(!userSnap.exists()) throw new Error("User not found");
         const profiles = await this.getProfilesByUserId(userId);
