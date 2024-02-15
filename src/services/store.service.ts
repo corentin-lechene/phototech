@@ -1,29 +1,21 @@
 import {defineStore} from "pinia";
+import {User} from "@/models/user.model";
 
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
-            id: '',
-            profileId: ''
+            user: null as Required<User> | null, //le required c'est parce que id est null de base
         }
     },
     getters: {
-        currentUserId: (state) => state.id,
-        currentProfileId: (state) => state.profileId,
+        isLoggedIn: (state) => !!state.user, // simple way to check if user is logged in
     },
     actions: {
-        setUserId(id: string) {
-            this.id = id;
+        setUser(user: Required<User>) {
+            this.user = user;
         },
-
-        setUserProfile(id: string) {
-            this.profileId = id;
-        },
-
-        clear() {
-            this.id = '';
-            this.profileId = '';
+        logout() {
+            this.user = null;
         }
-
     }
 })
