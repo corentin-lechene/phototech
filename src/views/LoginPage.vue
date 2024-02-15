@@ -52,8 +52,8 @@ onMounted(() => {
 
           <Message v-if="messageErrorCredential" :closable="false" severity="error">{{ messageErrorCredential }}</Message>
 
-          <InputForm v-model:inputValue="mail" :messageError="messageErrorMail" placeholder="Mail"/>
-          <InputForm v-model:inputValue="password" :messageError="messageErrorPassword" placeholder="Mot de Passe" type="Password"/>
+          <InputForm v-model:inputValue="mail" :messageError="messageErrorMail" type="email" placeholder="Mail"/>
+          <InputForm v-model:inputValue="password" :messageError="messageErrorPassword" placeholder="Mot de Passe" type="password"/>
 
           <Button class="mb-2 h-3rem" label="Se Connecter" @click="onClickedSignIn()"/>
           <span class="align-self-start">Pas de compte ? Créer en un <span id="ici" class="underline"><a
