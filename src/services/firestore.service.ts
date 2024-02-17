@@ -1,9 +1,10 @@
-import {collection, doc, Firestore, getDocs, getFirestore, setDoc, getDoc, deleteDoc, updateDoc} from "firebase/firestore";
+import {collection, doc, Firestore, getDocs, setDoc, getDoc, deleteDoc, updateDoc} from "firebase/firestore";
+import {getFirebase} from "@/services/firebase.service";
 
 export class FirestoreService {
     db: Firestore;
     constructor() {
-        this.db = getFirestore();
+        this.db = getFirebase.firestore;
     }
 
     async getCollection(path: string) {

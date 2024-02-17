@@ -1,14 +1,15 @@
-import {Auth, getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import {Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword} from 'firebase/auth';
 import {UserService} from "@/services/user.service";
 import {User} from '@/models';
 import {useUserStore} from "@/stores/user.store";
+import {getFirebase} from "@/services/firebase.service";
 
 export class AuthService {
     auth: Auth
     userService: UserService
 
     constructor() {
-        this.auth = getAuth();
+        this.auth = getFirebase.auth;
         this.userService = new UserService();
     }
 
@@ -67,5 +68,9 @@ export class AuthService {
         await signOut(this.auth);
         const userStore = useUserStore();
         userStore.logout();
+    }
+
+    async refresh() {
+        await this.storeUser();
     }
 }
