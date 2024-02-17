@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import InputForm from "@/components/inputs/InputForm.vue";
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
@@ -17,6 +17,12 @@ const openChoosePictureModal = ref(false);
 const imageChosen = ref('');
 const pseudo = ref('');
 const disabled = computed(() => !pseudo.value?.trim() || !imageChosen.value);
+
+onMounted(() => {
+  if(currentUser.profiles.length >= 6) {
+    router.replace('/profiles')
+  }
+})
 
 const handleImageChosen = (image: string) => {
   imageChosen.value = image;

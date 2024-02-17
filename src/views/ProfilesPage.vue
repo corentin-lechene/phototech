@@ -44,7 +44,7 @@ function setProfile(profile: Required<Profile>) {
         @on-click="setProfile(profile)"
     />
   </div>
-  <div class="flex justify-content-center gap-7 mt-5">
+  <div v-if="profiles && profiles.length < 6" class="flex justify-content-center gap-7 mt-5">
     <ProfileAvatar
         class="flex flex-column align-items-center gap-2"
         icon="pi pi-plus"
