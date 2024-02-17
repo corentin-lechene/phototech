@@ -7,6 +7,7 @@ import ChoosePictureModal from "@/components/modal/ChoosePictureModal.vue";
 import {UserService} from "@/services/user.service";
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user.store";
+import {AuthService} from "@/services/auth.service";
 
 const router = useRouter();
 
@@ -29,7 +30,10 @@ function onSubmitNewProfile() {
         pseudo: pseudo.value,
         avatar: imageChosen.value
       })
-      .then(() => router.replace('/profiles'))
+      .then(() => {
+        const authServices = new AuthService();
+        authServices.refresh().then(() => router.replace('/profiles'));
+      })
       .catch(console.error);
 }
 

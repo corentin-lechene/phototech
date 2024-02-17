@@ -2,11 +2,11 @@
 import {onMounted, ref} from 'vue'
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
-import router from "@/router";
-import {UserService} from "@/services/user.service";
 import {Profile} from "@/models";
 import {useUserStore} from "@/stores/user.store"
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 
 const profiles = ref<Required<Profile>[]>();
 const currentUser = useUserStore().currentUser;
@@ -14,8 +14,7 @@ const currentUser = useUserStore().currentUser;
 
 onMounted(async () => {
   try {
-    const userService = new UserService();
-    profiles.value = await userService.getProfilesByUserId(currentUser.id);
+    profiles.value = currentUser.profiles;
   } catch(e) {
       console.error(e);
   }

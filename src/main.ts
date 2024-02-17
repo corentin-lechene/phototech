@@ -112,8 +112,6 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
-import {initializeApp, FirebaseOptions} from "firebase/app";
-import firebaseConfig from "../private-key-admin.json";
 import {createPinia} from "pinia";
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
@@ -121,14 +119,6 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
 const app = createApp(App);
-
-try {
-    initializeApp(firebaseConfig as FirebaseOptions);
-} catch(e) {
-    console.error(e);
-    console.error("Firebase is not initialized. Please check your Firebase configuration.");
-    process.exit(1);
-}
 
 app.use(pinia)
 app.use(PrimeVue, { ripple: true  });

@@ -4,7 +4,7 @@ export type User = {
     id?: string;
     email: string;
 
-    profiles: Profile[];
+    profiles: Required<Profile>[];
 
     createdAt: Date;
 };
