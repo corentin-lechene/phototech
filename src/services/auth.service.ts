@@ -1,4 +1,4 @@
-import {Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword} from 'firebase/auth';
+import {Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import {UserService} from "@/services/user.service";
 import {User} from '@/models';
 import {useUserStore} from "@/stores/user.store";
