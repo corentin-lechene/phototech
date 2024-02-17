@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/login",
         name: "login",
         component: LoginPage,
-        beforeEnter: requiredAuth
+        beforeEnter: isAuthenticated
     },
     {
         path: "/onboarding",
@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/register",
         name: "register",
         component: () => import("@/views/RegisterPage.vue"),
-        // beforeEnter: requiredAuth
+        beforeEnter: isAuthenticated
     },
     {
         path: "/profiles",
@@ -43,16 +43,23 @@ const routes: Array<RouteRecordRaw> = [
     },
 ];
 
-async function requiredAuth(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
+async function requiredAuth(_: RouteLocationNormalized, __: RouteLocationNormalized, next: NavigationGuardNext) {
     const userStore = useUserStore();
 
-    if(!userStore.isLoggedIn && to.name !== "login") {
+    if(!userStore.isLoggedIn) {
         return next("/login");
     }
 
-    if(userStore.isLoggedIn && (to.name === "login" || to.name === "register")) {
-        return next("/galleries");
+    return next();
+}
+
+async function isAuthenticated(_: RouteLocationNormalized, __: RouteLocationNormalized, next: NavigationGuardNext) {
+    const userStore = useUserStore();
+
+    if(userStore.isLoggedIn) {
+        return next("/profiles");
     }
+
     return next();
 }
 

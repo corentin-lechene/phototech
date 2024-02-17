@@ -3,7 +3,10 @@ import BaseHeader from "@/components/common/BaseHeader.vue";
 import InputForm from "@/components/inputs/InputForm.vue";
 import {ref} from "vue";
 import {AuthService} from "@/services/auth.service";
-import router from "@/router";
+import {useRouter} from "vue-router";
+
+
+const router = useRouter();
 
 const authService = new AuthService();
 
@@ -60,7 +63,7 @@ function onClickedSignUp() {
 
       <!-- Div Form Inscription -->
       <div class="div-form-register">
-        <div class="flex flex-column px-8" style="font-family: 'Inter'">
+        <div class="flex flex-column px-8">
           <h1 class="font-normal"> Inscription </h1>
           <p class="slogan font-normal">Capturez chaque instant, sans limite avec PhotoTech</p>
 
@@ -77,7 +80,11 @@ function onClickedSignUp() {
           </div>
 
           <Button label="S'inscrire" class="mb-2 h-3rem" @click="onClickedSignUp()"/>
-          <span class="align-self-start">Déjà un compte ? Connectez-vous <span id="ici" class="underline"><a href="/login">ici</a></span>.</span>
+          <div class="align-self-start font-normal">
+            <span>Déjà un compte ? Connectez-vous</span>
+            <span class="underline" style="color: #10b981">ici</span>
+            <span>.</span>
+          </div>
         </div>
       </div>
 
@@ -110,10 +117,6 @@ function onClickedSignUp() {
   font-size: 20px;
   line-height: 24px;
   color: rgba(255, 255, 255, 0.7);
-}
-
-#ici {
-  color: #0074D9;
 }
 
 </style>

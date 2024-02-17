@@ -9,13 +9,18 @@ interface PictureCardProps {
 }
 
 defineProps<PictureCardProps>();
-const emit = defineEmits(["onClick", "onDelete", "onRename"]);
+const emit = defineEmits(["onClick", "onDelete", "onRename", "onInfo"]);
 
 const menu = ref();
 const items = ref([
   {
     label: 'Options',
     items: [
+      {
+        label: 'Détails',
+        icon: 'pi pi-info-circle',
+        command: () => emit('onInfo')
+      },
       {
         label: 'Renommer',
         icon: 'pi pi-pencil',
@@ -52,7 +57,7 @@ function openPictureMenu(event: Event) {
     />
     <div class="flex justify-content-between mt-1">
       <div>
-        <h3 class="m-0">{{ title }}</h3>
+        <h3 class="m-0 capitalize">{{ title }}</h3>
         <small class="font-medium text-white-alpha-70">{{ subtitle }}</small>
       </div>
       <i

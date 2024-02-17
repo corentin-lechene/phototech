@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import {ref} from "vue";
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 
-const classics = ref<String[]>([
+const classics = [
     "https://randomuser.me/api/portraits/thumb/women/30.jpg",
     "https://randomuser.me/api/portraits/thumb/women/31.jpg",
     "https://randomuser.me/api/portraits/thumb/women/32.jpg",
@@ -11,7 +10,7 @@ const classics = ref<String[]>([
     "https://randomuser.me/api/portraits/thumb/women/35.jpg",
     "https://randomuser.me/api/portraits/thumb/women/36.jpg",
     "https://randomuser.me/api/portraits/thumb/women/37.jpg",
-]);
+];
 
 const emit = defineEmits(['imageChoose']);
 
@@ -21,7 +20,7 @@ const chooseImageEvent = (e: Event, image: string) => {
 }
 
 </script>
-<!-- composant : emit quand on clique sur sa photo qui balance la photo au parent + close (parent)  -->
+
 <template>
   <div class="flex flex-column gap-5 w-full h-full fixed px-8 ml-5">
     <div class="flex flex-row w-full h-fit">

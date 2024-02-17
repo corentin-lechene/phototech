@@ -3,15 +3,17 @@
 import AppLogo from "@/components/AppLogo.vue";
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import {ref} from "vue";
-import router from "@/router";
 import {AuthService} from "@/services/auth.service";
 import {useUserStore} from "@/stores/user.store";
+import {useRouter} from "vue-router";
 
 interface BaseHeaderProps {
   closeButton?: boolean;
   backButton?: boolean;
   avatar?: boolean;
 }
+
+const router = useRouter();
 
 defineProps<BaseHeaderProps>();
 const emit = defineEmits(["onCloseButton", "onBackButton"]);
