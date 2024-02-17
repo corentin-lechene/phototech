@@ -38,7 +38,7 @@ export class UserService {
         });
     }
 
-    async getProfilesByUserId(userId: string): Promise<Profile[]> {
+    async getProfilesByUserId(userId: string): Promise<Required<Profile>[]> {
         const usersSnap = await this.db.getCollection(`users/${userId}/profiles`);
         if(usersSnap.empty) return [];
         return usersSnap.docs.map(doc => {

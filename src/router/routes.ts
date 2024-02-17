@@ -1,35 +1,58 @@
-import {RouteRecordRaw} from "vue-router";
-import LoginPage from "@/views/LoginPage.vue"; //todo après ça sera profiles
+import {NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw} from "vue-router";
+import {useUserStore} from "@/stores/user.store";
+import ProfilesPage from "@/views/ProfilesPage.vue";
+
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        redirect: "/login" //todo après ça sera profiles
+        redirect: "/profiles"
     },
     {
         path: "/login",
-        component: LoginPage
+        name: "login",
+        component: import("@/views/LoginPage.vue"),
+        beforeEnter: requiredAuth
     },
     {
         path: "/onboarding",
-        component: () => import("@/views/Onboarding.vue")
+        component: () => import("@/views/Onboarding.vue"),
+        beforeEnter: requiredAuth
     },
     {
         path: "/register",
-        component: () => import("@/views/RegisterPage.vue")
+        name: "register",
+        component: () => import("@/views/RegisterPage.vue"),
+        beforeEnter: requiredAuth
     },
     {
         path: "/profiles",
-        component: () => import("@/views/ProfilesPage.vue")
+        component: () => ProfilesPage,
+        beforeEnter: requiredAuth
     },
     {
         path: "/galleries",
-        component: () => import("@/views/GalleriesPage.vue")
+        component: () => import("@/views/GalleriesPage.vue"),
+        beforeEnter: requiredAuth
     },
     {
         path: "/galleries/:galleryId",
-        component: () => import("@/views/GalleryDetailPage.vue")
+        component: () => import("@/views/GalleryDetailPage.vue"),
+        beforeEnter: requiredAuth
     },
 ];
+
+async function requiredAuth(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
+    const userStore = useUserStore();
+
+    if(!userStore.isLoggedIn && to.name !== "login") {
+        return next("/login");
+    }
+
+    if(userStore.isLoggedIn && (to.name === "login" || to.name === "register")) {
+        return next("/galleries");
+    }
+    return next();
+}
 
 export default routes;

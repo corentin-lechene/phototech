@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import {ref} from "vue";
+
+type inputType = "password" | "text" | 'email';
 
 interface Content{
   placeholder: string,
-  messageError?: string
+  messageError?: string,
+  inputValue: string,
+  type?: inputType
 }
-defineProps<Content>();
+withDefaults(defineProps<Content>(), {
+  type: "text"
+});
 
-const s = ref('');
+const inputValue = defineModel('inputValue')
 
-// todo v-model
 </script>
 
 <template>
-  <div class="card flex w-full">
-    <div class="flex flex-column gap-2 w-full mb-4">
-      <InputText v-model="s" :placeholder=placeholder class="h-3rem"/>
-      <small v-if="messageError" class="align-self-start text-red-500">{{messageError}}</small>
-    </div>
+  <div class="flex flex-column gap-2 w-full mb-4">
+    <InputText :type="type" v-model="inputValue" :placeholder=placeholder class="w- h-3rem"/>
+    <small v-if="messageError" class="align-self-start text-red-500">{{messageError}}</small>
   </div>
 </template>
 

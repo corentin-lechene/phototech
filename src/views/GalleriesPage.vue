@@ -4,9 +4,10 @@ import BaseHeader from "@/components/common/BaseHeader.vue";
 import PictureCard from "@/components/pictures/PictureCard.vue";
 import {UserService} from "@/services/user.service";
 import {Gallery} from "@/models";
+import {useUserStore} from "@/stores/user.store";
 
-const currentUserId = "ahqdE9y0DOtU12THxfZD"; //todo get from store
-const currentProfileId = "W2DgPs91zBrNDyw8Kh5q"; //todo get from store
+const currentUser = useUserStore().currentUser;
+const currentProfile = useUserStore().currentProfile;
 
 const openCreateAlbumDialog = ref(false);
 
@@ -21,7 +22,7 @@ onMounted(() => {
 function onCreateAlbum() {
   const userService = new UserService();
   userService
-      .addGallery(currentUserId, currentProfileId, {title: albumName.value})
+      .addGallery(currentUser.id, currentProfile.id, {title: albumName.value})
       .then(() => fetchGalleries())
       .then(() => openCreateAlbumDialog.value = false)
       .then(() => albumName.value = "")
@@ -30,14 +31,14 @@ function onCreateAlbum() {
 
 function fetchGalleries() {
   const userService = new UserService();
-  userService.getGalleriesByProfileId(currentUserId, currentProfileId)
+  userService.getGalleriesByProfileId(currentUser.id, currentProfile.id)
       .then(response => galleries.value = response)
       .catch(console.error);
 }
 
 function deleteAlbum(galleryId: string) {
   const userService = new UserService();
-  userService.deleteGallery(currentUserId, currentProfileId, galleryId)
+  userService.deleteGallery(currentUser.id, currentProfile.id, galleryId)
       .then(() => fetchGalleries())
       .catch(console.error);
 }

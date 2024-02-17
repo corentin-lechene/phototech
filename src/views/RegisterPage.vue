@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import InputForm from "@/components/inputs/InputForm.vue";
+import {ref} from "vue";
 
+const mail = ref('');
+const password = ref('');
+const messageError = ref('');
 </script>
 
 <template>
@@ -17,8 +21,8 @@ import InputForm from "@/components/inputs/InputForm.vue";
           <h1 class="font-normal"> Inscription </h1>
           <p class="slogan font-normal">Capturez chaque instant, sans limite avec PhotoTech</p>
 
-          <InputForm placeholder="Mail"/>
-          <InputForm placeholder="Mot de Passe"/>
+          <InputForm v-model:inputValue="mail"  type="email" placeholder="Mail"/>
+          <InputForm v-model:inputValue="password" type="password" placeholder="Mot de Passe"/>
 
           <div class="card flex flex-wrap justify-content-center gap-3 align-self-start mb-2">
             <div class="flex align-items-center">
