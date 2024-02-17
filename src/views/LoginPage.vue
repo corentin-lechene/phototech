@@ -3,7 +3,9 @@ import BaseHeader from "@/components/common/BaseHeader.vue";
 import InputForm from "@/components/inputs/InputForm.vue";
 import {ref} from "vue";
 import {AuthService} from "@/services/auth.service";
-import router from "@/router";
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const authService = new AuthService();
 
@@ -14,7 +16,7 @@ const messageError = ref('');
 function onClickedSignIn() {
   authService.signIn(mail.value, password.value)
       .then(async () => {
-        await router.push("profiles/");
+        await router.push("/profiles");
       })
       .catch((error) => {
         console.error("Erreur lors de la connexion" + error)
@@ -27,6 +29,15 @@ function onClickedSignIn() {
       })
 }
 
+async function onClickedSignUpWithGoogle() {
+  try {
+    await authService.signInWithGoogle();
+    await router.push("/profiles");
+  } catch (e) {
+    console.error("error " + e);
+  }
+
+}
 </script>
 
 <template>
@@ -50,9 +61,14 @@ function onClickedSignIn() {
           <Button class="mb-2 h-3rem" label="Se Connecter" @click="onClickedSignIn()"/>
           <div class="align-self-start font-normal">
             <span>Pas de compte ? Créer en un </span>
-            <span class="underline" style="color: #10b981">ici</span>
+              <span class="underline" style="color: #10b981; cursor: pointer;" @click="$router.push('/register')">ici</span>
             <span>.</span>
           </div>
+
+          <Divider class="my-4"/>
+
+          <Button label="Se connecter avec Google" severity="info" raised class="mb-2 h-3rem" @click="onClickedSignUpWithGoogle()"/>
+
         </div>
       </div>
 
@@ -75,12 +91,12 @@ function onClickedSignIn() {
 .div-form-login {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.005) 0%, rgba(255, 255, 255, 0.0508399) 49.16%, rgba(255, 255, 255, 0.005) 100%);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  width: 70%;
-  height: 80%;
+  width: auto;
+  height: auto;
   border-radius: 30px;
+  margin: 0 4em;
   text-align: center;
-  margin-left: 10%;
-  padding-top: 3%;
+  padding: 2em 0;
 }
 
 .slogan {
