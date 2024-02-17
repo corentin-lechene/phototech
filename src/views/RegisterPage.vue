@@ -17,8 +17,6 @@ const passwordErrorMessage = ref('');
 
 function onClickedSignUp() {
   errorMessage.value = "";
-  successMessage.value = "";
-
   mailErrorMessage.value = "";
   passwordErrorMessage.value = "";
 
