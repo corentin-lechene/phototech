@@ -25,7 +25,7 @@ function onClickedSignUp() {
 
   authService.signUp(mail.value, password.value, conditionsChecked.value)
       .then(async () => {
-        await router.push("profiles/");
+        await router.push("/profiles");
       })
       .catch((error) => {
 
@@ -49,9 +49,17 @@ function onClickedSignUp() {
         }
 
       })
-
 }
 
+async function onClickedSignUpWithGoogle() {
+  try {
+    await authService.signInWithGoogle();
+    await router.push("/profiles");
+  } catch (e) {
+    console.error("error " + e);
+  }
+
+}
 </script>
 
 <template>
@@ -81,10 +89,13 @@ function onClickedSignUp() {
 
           <Button label="S'inscrire" class="mb-2 h-3rem" @click="onClickedSignUp()"/>
           <div class="align-self-start font-normal">
-            <span>Déjà un compte ? Connectez-vous</span>
-            <span class="underline" style="color: #10b981">ici</span>
+            <span>Déjà un compte ? Connectez-vous </span>
+            <span class="underline" style="color: #10b981; cursor: pointer;"><a @click="$router.push('/login')">ici</a></span>
             <span>.</span>
           </div>
+          <Divider class="my-4"/>
+          <Button label="S'inscrire avec Google" severity="info" raised class="mb-2 h-3rem" @click="onClickedSignUpWithGoogle()"/>
+
         </div>
       </div>
 

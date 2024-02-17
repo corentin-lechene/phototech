@@ -1,4 +1,4 @@
-import {Auth, getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword} from 'firebase/auth';
+import {Auth, getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import {UserService} from "@/services/user.service";
 import {User} from '@/models';
 import {useUserStore} from "@/stores/user.store";
@@ -31,6 +31,23 @@ export class AuthService {
             await this.storeUser();
         }
 
+    }
+
+    async signInWithGoogle() {
+        const provider = new GoogleAuthProvider();
+        const credential = await signInWithPopup(this.auth, provider);
+
+        try {
+            await this.userService.getByUserId(credential.user.uid);
+
+        } catch (e) {
+
+            if (credential.user.email) {
+                await this.userService.create(credential.user.uid, credential.user.email)
+            }
+        }
+
+        await this.storeUser();
     }
 
     async signIn(mail: string, password: string) {
