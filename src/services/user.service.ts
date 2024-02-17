@@ -10,12 +10,13 @@ export class UserService {
         this.db = new FirestoreService();
     }
 
-    async create() {
+    async create(id: string, email: string) {
         const user: Partial<User> = {
-            email: "c.lech@fiters.co",
+            email: email,
             createdAt: new Date()
         };
-        return this.db.addDocument("users", user);
+
+        return this.db.addDocument(`users`, user, id);
     }
 
     async getByUserId(userId: string): Promise<User> {
@@ -53,21 +54,23 @@ export class UserService {
         });
     }
 
-    async getGalleriesByProfileId(userId: string, profileId: string) {
+    async getGalleriesByProfileId(userId: string, profileId: string): Promise<Required<Gallery>[]> {
         const galleriesSnap = await this.db.getCollection(`users/${userId}/profiles/${profileId}/galleries`);
         if(galleriesSnap.empty) return [];
-        return galleriesSnap.docs.map(doc => {
+        const galleries = galleriesSnap.docs.map(async doc => {
             const data = doc.data();
+            const images = await this.getPicturesByGalleryId(userId, profileId, doc.id);
             return {
                 id: doc.id,
                 title: data.title,
-                images: [],
+                images: images,
                 createdAt: data.createdAt.toDate(),
-            };
+            } as Required<Gallery>;
         });
+        return Promise.all(galleries);
     }
 
-    async getPicturesByGalleryId(userId: string, profileId: string, galleryId: string) {
+    async getPicturesByGalleryId(userId: string, profileId: string, galleryId: string): Promise<Required<Picture>[]> {
         const picturesSnap = await this.db.getCollection(`users/${userId}/profiles/${profileId}/galleries/${galleryId}/pictures`);
         if(picturesSnap.empty) return [];
         return picturesSnap.docs.map(doc => {
@@ -100,5 +103,11 @@ export class UserService {
 
     deletePicture(currentUserId: string, currentProfileId: string, value: string, pictureId: string) {
         return this.db.deleteDocument(`users/${currentUserId}/profiles/${currentProfileId}/galleries/${value}/pictures/${pictureId}`);
+    }
+
+    updateGallery(userId: string, currentProfileId: string, gallery: Required<Gallery>) {
+        return this.db.updateDocument(`users/${userId}/profiles/${currentProfileId}/galleries/${gallery.id}`, {
+            title: gallery.title
+        });
     }
 }

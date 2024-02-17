@@ -1,6 +1,7 @@
 import {NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw} from "vue-router";
 import {useUserStore} from "@/stores/user.store";
 import ProfilesPage from "@/views/ProfilesPage.vue";
+import LoginPage from "@/views/LoginPage.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -11,8 +12,8 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/login",
         name: "login",
-        component: import("@/views/LoginPage.vue"),
-        beforeEnter: requiredAuth
+        component: LoginPage,
+        beforeEnter: isAuthenticated
     },
     {
         path: "/onboarding",
@@ -23,11 +24,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/register",
         name: "register",
         component: () => import("@/views/RegisterPage.vue"),
-        beforeEnter: requiredAuth
+        beforeEnter: isAuthenticated
     },
     {
         path: "/profiles",
-        component: () => ProfilesPage,
+        component: ProfilesPage,
         beforeEnter: requiredAuth
     },
     {
@@ -42,16 +43,23 @@ const routes: Array<RouteRecordRaw> = [
     },
 ];
 
-async function requiredAuth(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
+async function requiredAuth(_: RouteLocationNormalized, __: RouteLocationNormalized, next: NavigationGuardNext) {
     const userStore = useUserStore();
 
-    if(!userStore.isLoggedIn && to.name !== "login") {
+    if(!userStore.isLoggedIn) {
         return next("/login");
     }
 
-    if(userStore.isLoggedIn && (to.name === "login" || to.name === "register")) {
-        return next("/galleries");
+    return next();
+}
+
+async function isAuthenticated(_: RouteLocationNormalized, __: RouteLocationNormalized, next: NavigationGuardNext) {
+    const userStore = useUserStore();
+
+    if(userStore.isLoggedIn) {
+        return next("/profiles");
     }
+
     return next();
 }
 

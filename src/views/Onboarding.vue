@@ -46,7 +46,6 @@ function onSubmitNewProfile() {
         <Divider class="my-5"/>
         <InputForm v-model:input-value="pseudo" placeholder="Nom du profil"/>
         <Button :disabled="disabled" label="Confirmer" class="w-full h-3rem" @click="onSubmitNewProfile()"/>
-
       </div>
     </div>
     <div class="flex justify-content-center align-items-center" style="flex-grow: 3;">
@@ -78,7 +77,7 @@ function onSubmitNewProfile() {
   </div>
 </template>
 
-<style scoped>
+<style>
   .style-modal {
     background-color: #202639;
     color: #ffffff;

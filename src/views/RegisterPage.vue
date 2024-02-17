@@ -2,10 +2,56 @@
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import InputForm from "@/components/inputs/InputForm.vue";
 import {ref} from "vue";
+import {AuthService} from "@/services/auth.service";
+import {useRouter} from "vue-router";
+
+
+const router = useRouter();
+
+const authService = new AuthService();
 
 const mail = ref('');
 const password = ref('');
-const messageError = ref('');
+const conditionsChecked = ref(false);
+
+const errorMessage = ref('');
+const mailErrorMessage = ref('');
+const passwordErrorMessage = ref('');
+
+function onClickedSignUp() {
+  errorMessage.value = "";
+  mailErrorMessage.value = "";
+  passwordErrorMessage.value = "";
+
+  authService.signUp(mail.value, password.value, conditionsChecked.value)
+      .then(async () => {
+        await router.push("profiles/");
+      })
+      .catch((error) => {
+
+        console.error("Erreur lors de l'enregistrement" + error.message)
+        if(error.message === "auth/empty-fields") {
+          errorMessage.value = "Veuillez remplir tous les champs";
+        }
+
+        if(error.message === "auth/conditions-not-checked") {
+          errorMessage.value = "Veuillez accepter les conditions.";
+        }
+
+        if(error.code === "auth/invalid-email") {
+          mailErrorMessage.value = "Mauvais mail";
+        }
+        if(error.code === "auth/missing-password") {
+          passwordErrorMessage.value = "Le mot de passe est requis.";
+        }
+        if(error.code === "auth/weak-password") {
+          passwordErrorMessage.value = "Votre mot est faible. Il doit faire au moins 6 caractères.";
+        }
+
+      })
+
+}
+
 </script>
 
 <template>
@@ -17,22 +63,28 @@ const messageError = ref('');
 
       <!-- Div Form Inscription -->
       <div class="div-form-register">
-        <div class="flex flex-column px-8" style="font-family: 'Inter'">
+        <div class="flex flex-column px-8">
           <h1 class="font-normal"> Inscription </h1>
           <p class="slogan font-normal">Capturez chaque instant, sans limite avec PhotoTech</p>
 
-          <InputForm v-model:inputValue="mail"  type="email" placeholder="Mail"/>
-          <InputForm v-model:inputValue="password" type="password" placeholder="Mot de Passe"/>
+          <Message v-if="errorMessage" :closable="false" severity="error">{{ errorMessage }}</Message>
+
+          <InputForm v-model:inputValue="mail" :messageError="mailErrorMessage" type="email" placeholder="Mail"/>
+          <InputForm v-model:inputValue="password" :messageError="passwordErrorMessage" type="password" placeholder="Mot de Passe"/>
 
           <div class="card flex flex-wrap justify-content-center gap-3 align-self-start mb-2">
             <div class="flex align-items-center">
-              <Checkbox inputId="conditions" name="conditions" value="conditions" />
+              <Checkbox inputId="conditions" name="conditions" value="conditions" v-model="conditionsChecked" :binary="true"/>
               <label for="conditions" class="ml-2"> J’accepte les conditions générales </label>
             </div>
           </div>
 
-          <Button label="S'inscrire" class="mb-2 h-3rem"/>
-          <span class="align-self-start">Déjà un compte ? Connectez-vous <span id="ici" class="underline"><a href="/login">ici</a></span>.</span>
+          <Button label="S'inscrire" class="mb-2 h-3rem" @click="onClickedSignUp()"/>
+          <div class="align-self-start font-normal">
+            <span>Déjà un compte ? Connectez-vous</span>
+            <span class="underline" style="color: #10b981">ici</span>
+            <span>.</span>
+          </div>
         </div>
       </div>
 
@@ -52,7 +104,7 @@ const messageError = ref('');
 <style scoped>
 .div-form-register {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.005) 0%, rgba(255, 255, 255, 0.0508399) 49.16%, rgba(255, 255, 255, 0.005) 100%);
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   width: 70%;
   height: 80%;
   border-radius: 30px;
@@ -65,10 +117,6 @@ const messageError = ref('');
   font-size: 20px;
   line-height: 24px;
   color: rgba(255, 255, 255, 0.7);
-}
-
-#ici {
-  color: #0074D9;
 }
 
 </style>

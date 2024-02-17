@@ -38,7 +38,7 @@ function onClickedSignIn() {
 
       <!-- Div Form Connexion -->
       <div class="div-form-login">
-        <div class="flex flex-column px-8" style="font-family: 'Inter'">
+        <div class="flex flex-column px-8">
           <h1 class="font-normal"> Connexion </h1>
           <p class="slogan font-normal">Capturez chaque instant, sans limite avec PhotoTech</p>
 
@@ -48,8 +48,11 @@ function onClickedSignIn() {
           <InputForm v-model:inputValue="password" placeholder="Mot de Passe" type="password"/>
 
           <Button class="mb-2 h-3rem" label="Se Connecter" @click="onClickedSignIn()"/>
-          <span class="align-self-start">Pas de compte ? Créer en un <span id="ici" class="underline"><a
-              href="/register">ici</a></span>.</span>
+          <div class="align-self-start font-normal">
+            <span>Pas de compte ? Créer en un </span>
+            <span class="underline" style="color: #10b981">ici</span>
+            <span>.</span>
+          </div>
         </div>
       </div>
 
@@ -84,10 +87,6 @@ function onClickedSignIn() {
   font-size: 20px;
   line-height: 24px;
   color: rgba(255, 255, 255, 0.7);
-}
-
-#ici {
-  color: #0074D9;
 }
 
 </style>
