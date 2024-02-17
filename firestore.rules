@@ -1,21 +1,9 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    match /users/{userId} {
-      allow read, write: if request.auth.uid == userId;
-
-      match /profiles/{profileId} {
-        allow read, write: if request.auth.uid == userId;
-
-        match /galleries/{galleryId} {
-          allow read, write: if request.auth.uid == userId;
-
-          match /pictures/{pictureId} {
-            allow read, write, delete: if request.auth.uid == userId && resource.data.profileId == profileId;
-          }
-        }
-      }
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
