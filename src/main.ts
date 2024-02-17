@@ -115,8 +115,11 @@ import VirtualScroller from 'primevue/virtualscroller';
 import {initializeApp, FirebaseOptions} from "firebase/app";
 import firebaseConfig from "../private-key-admin.json";
 import {createPinia} from "pinia";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
 const app = createApp(App);
 
 try {

@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import InputForm from "@/components/inputs/InputForm.vue";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import {AuthService} from "@/services/auth.service";
 import router from "@/router";
-import {useUserStore} from "@/store/user.store";
 
 const authService = new AuthService();
 
@@ -20,19 +19,14 @@ function onClickedSignIn() {
       .catch((error) => {
         console.error("Erreur lors de la connexion" + error)
 
-        if(error.code != "auth/invalid-email" || error.code != "auth/invalid-credential") {
+        if (error.code != "auth/invalid-email" || error.code != "auth/invalid-credential") {
           messageError.value = "Invalid Credentials";
         }
 
         password.value = '';
-
       })
 }
 
-onMounted(() => {
-  authService.signOut();
-  useUserStore().logout();
-});
 </script>
 
 <template>
@@ -50,8 +44,8 @@ onMounted(() => {
 
           <Message v-if="messageError" :closable="false" severity="error">{{ messageError }}</Message>
 
-          <InputForm v-model:inputValue="mail"  type="email" placeholder="Mail"/>
-          <InputForm v-model:inputValue="password" type="password" placeholder="Mot de Passe"/>
+          <InputForm v-model:inputValue="mail" placeholder="Mail" type="email"/>
+          <InputForm v-model:inputValue="password" placeholder="Mot de Passe" type="password"/>
 
           <Button class="mb-2 h-3rem" label="Se Connecter" @click="onClickedSignIn()"/>
           <span class="align-self-start">Pas de compte ? Créer en un <span id="ici" class="underline"><a

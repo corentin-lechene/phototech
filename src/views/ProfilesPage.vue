@@ -5,25 +5,24 @@ import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import router from "@/router";
 import {UserService} from "@/services/user.service";
 import {Profile} from "@/models";
-import {useUserStore} from "@/store/user.store";
+import {useUserStore} from "@/stores/user.store"
 
 
-const profiles = ref<Profile[]>();
-const currentUserId = "ahqdE9y0DOtU12THxfZD"; //todo get from store
+const profiles = ref<Required<Profile>[]>();
+const currentUser = useUserStore().currentUser;
 
-console.log("profile " + useUserStore().isLoggedIn);
 
 onMounted(async () => {
   try {
     const userService = new UserService();
-    profiles.value = await userService.getProfilesByUserId(currentUserId)
+    profiles.value = await userService.getProfilesByUserId(currentUser.id);
   } catch(e) {
       console.error(e);
   }
 })
 
-function setProfile(profile: Profile) {
-  console.log("Use PhotoTech for profile: ", profile);
+function setProfile(profile: Required<Profile>) {
+  useUserStore().setCurrentProfile(profile);
   router.push("/galleries");
 }
 </script>

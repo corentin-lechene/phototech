@@ -4,6 +4,8 @@ import AppLogo from "@/components/AppLogo.vue";
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import {ref} from "vue";
 import router from "@/router";
+import {AuthService} from "@/services/auth.service";
+import {useUserStore} from "@/stores/user.store";
 
 interface BaseHeaderProps {
   closeButton?: boolean;
@@ -18,12 +20,7 @@ const onBackButtonClicked = () => {
   emit('onBackButton');
 }
 
-//todo fetch current user
-const profile = ref({
-  id: "1",
-  pseudo: "corentin",
-  avatar: "https://randomuser.me/api/portraits/thumb/women/30.jpg"
-});
+const currentProfile = ref(useUserStore().currentProfile);
 
 
 const menu = ref();
@@ -39,7 +36,11 @@ const items = ref([
       {
         label: 'Déconnexion',
         icon: 'pi pi-sign-out',
-        command: () => router.push("/login")
+        command: async () => {
+          const authService = new AuthService();
+          await authService.signOut();
+          await router.replace("/login");
+        }
       }
     ]
   }
@@ -55,11 +56,11 @@ function displayMenu(event: Event) {
 <template>
   <div class="flex justify-content-between p-5 align-items-center">
     <AppLogo/>
-    <Button v-if="closeButton" icon="pi pi-times" outlined rounded aria-label="Cancel"/>
+    <Button v-if="closeButton" icon="pi pi-times" outlined rounded aria-label="Cancel" @click="$emit('onCloseButton')"/>
     <Button v-else-if="backButton" icon="pi pi-arrow-left" outlined rounded aria-label="Cancel" @click="onBackButtonClicked()"/>
     <ProfileAvatar
-        v-else-if="avatar && profile"
-        :image="profile.avatar"
+        v-else-if="avatar && currentProfile"
+        :image="currentProfile.avatar"
         aria-haspopup="true"
         aria-controls="overlay_menu"
         mini

@@ -6,12 +6,15 @@ import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import ChoosePictureModal from "@/components/modal/ChoosePictureModal.vue";
 import {UserService} from "@/services/user.service";
 import {useRouter} from "vue-router";
+import {useUserStore} from "@/stores/user.store";
 
 const router = useRouter();
 
+const currentUser = useUserStore().currentUser;
+
 const openChoosePictureModal = ref(false);
 const imageChosen = ref('');
-const pseudo = ref('Melissa'); //todo add v-model
+const pseudo = ref('');
 const disabled = computed(() => !pseudo.value?.trim() || !imageChosen.value);
 
 const handleImageChosen = (image: string) => {
@@ -22,7 +25,7 @@ const handleImageChosen = (image: string) => {
 function onSubmitNewProfile() {
   const userService = new UserService();
   userService
-      .addProfile('ahqdE9y0DOtU12THxfZD', {
+      .addProfile(currentUser.id, {
         pseudo: pseudo.value,
         avatar: imageChosen.value
       })
@@ -41,7 +44,7 @@ function onSubmitNewProfile() {
         <h1 class="font-normal"> Ajoutez un nouveau profil </h1>
         <p class="text-sm font-semibold" style="letter-spacing: 0.05em;">Vous y êtes presque.. Choisissez votre Nom et votre photo de profil pour continuer.</p>
         <Divider class="my-5"/>
-        <InputForm placeholder="Nom du profil"/>
+        <InputForm v-model:input-value="pseudo" placeholder="Nom du profil"/>
         <Button :disabled="disabled" label="Confirmer" class="w-full h-3rem" @click="onSubmitNewProfile()"/>
 
       </div>
