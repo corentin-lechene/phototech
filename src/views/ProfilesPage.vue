@@ -5,13 +5,13 @@ import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import router from "@/router";
 import {UserService} from "@/services/user.service";
 import {Profile} from "@/models";
-import {useUserStore} from "@/services/store.service";
+import {useUserStore} from "@/store/user.store";
 
 
 const profiles = ref<Profile[]>();
 const currentUserId = "ahqdE9y0DOtU12THxfZD"; //todo get from store
 
-// console.log("profile " + useUserStore().currentUserId);
+console.log("profile " + useUserStore().isLoggedIn);
 
 onMounted(async () => {
   try {

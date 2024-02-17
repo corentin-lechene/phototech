@@ -1,31 +1,35 @@
-import {User, onAuthStateChanged, UserCredential, getAuth, signInWithEmailAndPassword, signOut, Auth} from 'firebase/auth';
-import {useUserStore} from "@/services/store.service";
+import {Auth, getAuth, signInWithEmailAndPassword, signOut} from 'firebase/auth';
+import {UserService} from "@/services/user.service";
+import {User} from '@/models';
+import {useUserStore} from "@/store/user.store";
 
 export class AuthService {
     auth: Auth
+    userService: UserService
 
     constructor() {
         this.auth = getAuth();
+        this.userService = new UserService();
     }
 
-    async isLoggedIn(): Promise<boolean> {
-        return new Promise<boolean>((resolve) => {
-            const unsubscribe = onAuthStateChanged(this.auth, (user: User | null) => {
-                unsubscribe(); // Arrête d'écouter les changements d'état après avoir obtenu la première réponse
-                if (user !== null) {
-                    useUserStore().setUserId(user.uid);
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            });
-        });
+    isLoggedIn(): boolean {
+        return this.auth.currentUser !== null;
     }
 
-    async signIn(mail: string, password: string): Promise<UserCredential> {
-        return await signInWithEmailAndPassword(this.auth, mail, password);
+    async signIn(mail: string, password: string) {
+        await signInWithEmailAndPassword(this.auth, mail, password);
+        await this.storeUser();
     }
 
+    async storeUser() {
+        if (this.isLoggedIn() && this.auth.currentUser) {
+            const user = await this.userService.getByUserId(this.auth.currentUser.uid);
+            const userStore = useUserStore();
+            userStore.setUser(user as Required<User>);
+        } else {
+            throw new Error("not connected")!
+        }
+    }
 
     async signOut(): Promise<void> {
         await signOut(this.auth);

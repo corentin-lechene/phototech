@@ -4,36 +4,34 @@ import InputForm from "@/components/inputs/InputForm.vue";
 import {onMounted, ref} from "vue";
 import {AuthService} from "@/services/auth.service";
 import router from "@/router";
-import {useUserStore} from "@/services/store.service";
+import {useUserStore} from "@/store/user.store";
 
 const authService = new AuthService();
 
 const mail = ref('');
 const password = ref('');
-const messageErrorMail = ref('');
-const messageErrorPassword = ref('');
-const messageErrorCredential = ref('');
-
+const messageError = ref('');
 
 function onClickedSignIn() {
   authService.signIn(mail.value, password.value)
       .then(async () => {
-
-        //verify if the user is correctly logged in
-        if (await authService.isLoggedIn()) await router.push("/profiles");
-        else messageErrorCredential.value = "Une erreur s'est produite lors de votre connexion. Veuillez réessayer.";
-
+        await router.push("profiles/");
       })
       .catch((error) => {
         console.error("Erreur lors de la connexion" + error)
-        messageErrorCredential.value = "Invalid Credentials";
+
+        if(error.code != "auth/invalid-email" || error.code != "auth/invalid-credential") {
+          messageError.value = "Invalid Credentials";
+        }
+
         password.value = '';
+
       })
 }
 
 onMounted(() => {
   authService.signOut();
-  useUserStore().clear();
+  useUserStore().logout();
 });
 </script>
 
@@ -50,10 +48,10 @@ onMounted(() => {
           <h1 class="font-normal"> Connexion </h1>
           <p class="slogan font-normal">Capturez chaque instant, sans limite avec PhotoTech</p>
 
-          <Message v-if="messageErrorCredential" :closable="false" severity="error">{{ messageErrorCredential }}</Message>
+          <Message v-if="messageError" :closable="false" severity="error">{{ messageError }}</Message>
 
-          <InputForm v-model:inputValue="mail" :messageError="messageErrorMail" placeholder="Mail"/>
-          <InputForm v-model:inputValue="password" :messageError="messageErrorPassword" placeholder="Mot de Passe" type="Password"/>
+          <InputForm v-model:inputValue="mail"  type="email" placeholder="Mail"/>
+          <InputForm v-model:inputValue="password" type="password" placeholder="Mot de Passe"/>
 
           <Button class="mb-2 h-3rem" label="Se Connecter" @click="onClickedSignIn()"/>
           <span class="align-self-start">Pas de compte ? Créer en un <span id="ici" class="underline"><a

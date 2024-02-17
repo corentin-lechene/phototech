@@ -42,10 +42,10 @@ const routes: Array<RouteRecordRaw> = [
 async function requiredAuth(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     const authService = new AuthService();
 
-    if (await authService.isLoggedIn()) {
-        next();
-    } else {
+    if (!await authService.isLoggedIn() && to.name !== "Login") {
         next("/login");
+    } else {
+        next();
     }
 }
 export default routes;
