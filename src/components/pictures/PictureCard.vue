@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {computed, ref} from "vue";
+import {ref} from "vue";
 
 interface PictureCardProps {
   image: string;
