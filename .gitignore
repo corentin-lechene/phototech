@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 /private-key-admin.json
+/.firebaserc
+/.firebase/hosting.cHVibGlj.cache
+/.firebase/hosting.ZGlzdA.cache
+/.firebase/
