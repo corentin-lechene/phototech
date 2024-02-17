@@ -1,4 +1,4 @@
-import {Auth, getAuth, signInWithEmailAndPassword, signOut} from 'firebase/auth';
+import {Auth, getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword} from 'firebase/auth';
 import {UserService} from "@/services/user.service";
 import {User} from '@/models';
 import {useUserStore} from "@/stores/user.store";
@@ -14,6 +14,23 @@ export class AuthService {
 
     isLoggedIn(): boolean {
         return this.auth.currentUser !== null;
+    }
+
+    async signUp(mail: string, password: string, conditionsChecked: boolean) {
+        if(!mail.trim() || !password.trim()) {
+            throw new Error("auth/empty-fields");
+        }
+
+        if(!conditionsChecked) {
+            throw new Error("auth/conditions-not-checked");
+        }
+
+        const credential = await createUserWithEmailAndPassword(this.auth, mail, password);
+        if(credential.user.email) {
+            await this.userService.create(credential.user.uid, credential.user.email)
+            await this.storeUser();
+        }
+
     }
 
     async signIn(mail: string, password: string) {

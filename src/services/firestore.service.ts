@@ -16,9 +16,13 @@ export class FirestoreService {
         return getDoc(docRef);
     }
 
-    async addDocument(path: string, data: any) {
+    async addDocument(path: string, data: any, id?: string) {
         const collectionRef = collection(this.db, path);
-        const newDocRef = doc(collectionRef);
+
+        let newDocRef;
+        if(!id) newDocRef = doc(collectionRef);
+        else newDocRef = doc(collectionRef, id);
+
         return setDoc(newDocRef, data);
     }
 

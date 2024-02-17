@@ -10,12 +10,13 @@ export class UserService {
         this.db = new FirestoreService();
     }
 
-    async create() {
+    async create(id: string, email: string) {
         const user: Partial<User> = {
-            email: "c.lech@fiters.co",
+            email: email,
             createdAt: new Date()
         };
-        return this.db.addDocument("users", user);
+
+        return this.db.addDocument(`users`, user, id);
     }
 
     async getByUserId(userId: string): Promise<User> {

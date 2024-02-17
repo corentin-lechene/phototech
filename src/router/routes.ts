@@ -1,6 +1,7 @@
 import {NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw} from "vue-router";
 import {useUserStore} from "@/stores/user.store";
 import ProfilesPage from "@/views/ProfilesPage.vue";
+import LoginPage from "@/views/LoginPage.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -11,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/login",
         name: "login",
-        component: import("@/views/LoginPage.vue"),
+        component: LoginPage,
         beforeEnter: requiredAuth
     },
     {
@@ -23,11 +24,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/register",
         name: "register",
         component: () => import("@/views/RegisterPage.vue"),
-        beforeEnter: requiredAuth
+        // beforeEnter: requiredAuth
     },
     {
         path: "/profiles",
-        component: () => ProfilesPage,
+        component: ProfilesPage,
         beforeEnter: requiredAuth
     },
     {
