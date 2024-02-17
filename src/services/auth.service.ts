@@ -39,9 +39,7 @@ export class AuthService {
 
         try {
             await this.userService.getByUserId(credential.user.uid);
-
         } catch (e) {
-
             if (credential.user.email) {
                 await this.userService.create(credential.user.uid, credential.user.email)
             }

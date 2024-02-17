@@ -90,7 +90,7 @@ async function onClickedSignUpWithGoogle() {
           <Button label="S'inscrire" class="mb-2 h-3rem" @click="onClickedSignUp()"/>
           <div class="align-self-start font-normal">
             <span>Déjà un compte ? Connectez-vous </span>
-            <span class="underline" style="color: #10b981; cursor: pointer;"><a @click="$router.push('/login')">ici</a></span>
+            <span class="underline" style="color: #10b981; cursor: pointer;" @click="$router.push('/login')">ici</span>
             <span>.</span>
           </div>
           <Divider class="my-4"/>
@@ -116,13 +116,14 @@ async function onClickedSignUpWithGoogle() {
 .div-form-register {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.005) 0%, rgba(255, 255, 255, 0.0508399) 49.16%, rgba(255, 255, 255, 0.005) 100%);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  width: 70%;
-  height: 80%;
+  width: auto;
+  height: auto;
   border-radius: 30px;
+  margin: 0 4em;
   text-align: center;
-  margin-left: 10%;
-  padding-top: 3%;
+  padding: 2em 0;
 }
+
 
 .slogan {
   font-size: 20px;

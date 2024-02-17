@@ -45,7 +45,7 @@ const routes: Array<RouteRecordRaw> = [
 
 async function requiredAuth(_: RouteLocationNormalized, __: RouteLocationNormalized, next: NavigationGuardNext) {
     const userStore = useUserStore();
-    // userStore.logout();
+
     if(!userStore.isLoggedIn) {
         return next("/login");
     }
