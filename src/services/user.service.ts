@@ -39,6 +39,18 @@ export class UserService {
         });
     }
 
+    async getGalleryById(userId: string, profileId: string, galleryId: string): Promise<Required<Gallery>> {
+        const gallerySnap = await this.db.getDocument(`users/${userId}/profiles/${profileId}/galleries/${galleryId}`);
+        if(!gallerySnap.exists()) throw new Error("Gallery not found");
+        const data = gallerySnap.data();
+        return {
+            id: gallerySnap.id,
+            title: data.title,
+            images: [],
+            createdAt: data.createdAt.toDate(),
+        };
+    }
+
     async getProfilesByUserId(userId: string): Promise<Required<Profile>[]> {
         const usersSnap = await this.db.getCollection(`users/${userId}/profiles`);
         if(usersSnap.empty) return [];

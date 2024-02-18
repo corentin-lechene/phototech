@@ -4,7 +4,7 @@ import {computed, onMounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import {UserService} from "@/services/user.service";
-import {Picture} from "@/models";
+import {Gallery, Picture} from "@/models";
 import {ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import {getFirebase} from "@/services/firebase.service";
 import {useUserStore} from "@/stores/user.store";
@@ -25,9 +25,7 @@ const fileInput = ref();
 const menu = ref();
 const currentPictureId = ref('');
 
-const items = ref([
-  {label: 'A ajouter le titre', command: () => router.replace('/galleries')},
-]);
+const items = ref<{label: string}[]>([]);
 
 const item = computed(() => [
   {
@@ -50,9 +48,11 @@ async function fetchPictures() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   galleryId.value = route.params.galleryId as string;
-  fetchPictures();
+  galleryTitle.value = (await userService.getGalleryById(currentUser.id, currentProfile.id, galleryId.value)).title;
+  items.value.push({ label: galleryTitle.value });
+  await fetchPictures();
 });
 
 const userService = new UserService();
@@ -94,7 +94,7 @@ async function onUpload(file: File) {
     return;
   }
 
-  const storageReference = storageRef(storage, `images/${galleryId.value}`);
+  const storageReference = storageRef(storage, `images/${currentUser.id}`);
   try {
     const snapshot = await uploadBytes(storageReference, file);
     const downloadURL = await getDownloadURL(snapshot.ref);
@@ -141,7 +141,7 @@ function openPictureMenu(pictureId: string, event: Event) {
   <div>
     <BaseHeader avatar/>
     <div class="px-8 mb-8 flex flex-column">
-      <Breadcrumb :home="{ icon: 'pi pi-home' }" :model="items"/>
+      <Breadcrumb :home="{ icon: 'pi pi-home', url: '/galleries' }" :model="items"/>
       <div class="flex justify-content-between align-items-center">
         <h1 class="font-bold">{{ galleryTitle }}</h1>
         <Button class="h-3rem" label="Ajouter une photo" @click="openAddImageDialog = true"/>
