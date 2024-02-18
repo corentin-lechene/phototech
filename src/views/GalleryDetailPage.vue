@@ -4,7 +4,7 @@ import {computed, onMounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import {UserService} from "@/services/user.service";
-import {Gallery, Picture} from "@/models";
+import {Picture} from "@/models";
 import {ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import {getFirebase} from "@/services/firebase.service";
 import {useUserStore} from "@/stores/user.store";
