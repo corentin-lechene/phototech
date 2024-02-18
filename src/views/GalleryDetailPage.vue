@@ -5,7 +5,10 @@ import {useRoute, useRouter} from "vue-router";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import {UserService} from "@/services/user.service";
 import {Picture} from "@/models";
-import {getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import {ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import {getFirebase} from "@/services/firebase.service";
+
+const { storage } = getFirebase;
 
 const currentUserId = ref("ahqdE9y0DOtU12THxfZD");
 const currentProfileId = ref("W2DgPs91zBrNDyw8Kh5q");
@@ -59,7 +62,7 @@ async function onDelete(pictureId: string) {
     console.error("Picture not found!");
     return;
   }
-  const pictureRef = storageRef(getStorage(), picture.url);
+  const pictureRef = storageRef(storage, picture.url);
 
   await deleteObject(pictureRef)
   try {
@@ -90,7 +93,6 @@ async function onUpload(file: File) {
     return;
   }
 
-  const storage = getStorage();
   const storageReference = storageRef(storage, `images/${galleryId.value}`);
   try {
     const snapshot = await uploadBytes(storageReference, file);
