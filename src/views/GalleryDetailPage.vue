@@ -7,11 +7,12 @@ import {UserService} from "@/services/user.service";
 import {Picture} from "@/models";
 import {ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import {getFirebase} from "@/services/firebase.service";
+import {useUserStore} from "@/stores/user.store";
 
 const { storage } = getFirebase;
 
-const currentUserId = ref("ahqdE9y0DOtU12THxfZD");
-const currentProfileId = ref("W2DgPs91zBrNDyw8Kh5q");
+const currentUser = useUserStore().currentUser
+const currentProfile = useUserStore().currentProfile
 const galleryId = ref("");
 const galleryTitle = ref("");
 const pictures = ref<Required<Picture>[]>([]);
@@ -43,7 +44,7 @@ const item = computed(() => [
 
 async function fetchPictures() {
   try {
-    pictures.value = await userService.getPicturesByGalleryId(currentUserId.value, currentProfileId.value, galleryId.value);
+    pictures.value = await userService.getPicturesByGalleryId(currentUser.id, currentProfile.id, galleryId.value);
   } catch (error) {
     console.error(error);
   }
@@ -66,7 +67,7 @@ async function onDelete(pictureId: string) {
 
   await deleteObject(pictureRef)
   try {
-    await userService.deletePicture(currentUserId.value, currentProfileId.value, galleryId.value, pictureId);
+    await userService.deletePicture(currentUser.id, currentProfile.id, galleryId.value, pictureId);
     pictures.value = pictures.value.filter(p => p.id !== pictureId);
   } catch (error) {
     console.error("There was an error deleting the picture:", error);
@@ -80,7 +81,7 @@ async function onAddPicture(downloadURL: string) {
       url: downloadURL,
       createdAt: new Date()
     };
-    await userService.addPicture(currentUserId.value, currentProfileId.value, galleryId.value, newPicture);
+    await userService.addPicture(currentUser.id, currentProfile.id, galleryId.value, newPicture);
     pictures.value.push(newPicture);
   } catch (error) {
     console.error('Error saving picture:', error);
