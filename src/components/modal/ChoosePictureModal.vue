@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import {ref} from "vue";
 
 const classics = [
     "https://randomuser.me/api/portraits/thumb/women/30.jpg",
@@ -12,8 +14,31 @@ const classics = [
     "https://randomuser.me/api/portraits/thumb/women/37.jpg",
 ];
 
+const fileInput = ref();
 const emit = defineEmits(['imageChoose']);
 
+function triggerFileSelect() {
+  fileInput.value?.click();
+}
+
+async function onUpload(file: File){
+  const storage = getStorage();
+  const storageReference = storageRef(storage, `avatars/newAvatar.jpg`); // Change the path as needed
+  try {
+    const snapshot = await uploadBytes(storageReference, file);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    emit('imageChoose', downloadURL);
+  } catch (error) {
+    console.error('Upload failed', error);
+  }
+}
+
+async function onFileSelected(event: Event){
+  const target = event.target as HTMLInputElement;
+  if (target?.files?.[0]) {
+    await onUpload(target.files[0]);
+  }
+}
 
 const chooseImageEvent = (e: Event, image: string) => {
   emit('imageChoose', image);
@@ -28,9 +53,10 @@ const chooseImageEvent = (e: Event, image: string) => {
         <h1>Choisir un avatar</h1>
         <p>Choisissez une photo qui vous ressemble ou bien télécharger-là.</p>
       </div>
+      <input type="file" ref="fileInput" @change="onFileSelected" accept="image/*" hidden>
       <div class="flex justify-content-end pr-7" style="flex-grow: 3;">
         <span class="p-buttonset mt-4 mr-2">
-          <Button icon-pos="right" label="Télécharger" class="h-3rem w-16rem"  icon="pi pi-cloud-upload" />
+      <Button icon-pos="right" label="Télécharger" class="h-3rem w-16rem" icon="pi pi-cloud-upload" @click="triggerFileSelect" />
         </span>
       </div>
     </div>
