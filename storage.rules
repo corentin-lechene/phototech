@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSigned() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSigned() && request.auth.uid == userId;
+    }
+
+    match /avatars/{document=**} {
+      allow read: if isSigned();
+    }
+
+    match /images/{userId}/{document=**} {
+      allow read, write, delete: if isOwner(userId);
+    }
+  }
+}

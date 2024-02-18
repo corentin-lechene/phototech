@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import {AvatarService} from "@/services/avatar.service";
 
+
+const avatars = ref<{name: string, url: string}[]>([]);
 const classics = [
     "https://randomuser.me/api/portraits/thumb/women/30.jpg",
     "https://randomuser.me/api/portraits/thumb/women/31.jpg",
@@ -44,6 +47,11 @@ const chooseImageEvent = (e: Event, image: string) => {
   emit('imageChoose', image);
 }
 
+onMounted(async () => {
+  const avatarService = new AvatarService();
+  avatars.value = await avatarService.getAvatars();
+})
+
 </script>
 
 <template>
@@ -64,11 +72,11 @@ const chooseImageEvent = (e: Event, image: string) => {
       <h2>Classiques</h2>
       <div class = "flex justify-content-start gap-4">
         <ProfileAvatar
-            v-for="classic in classics"
+            v-for="avatar in avatars"
             class="flex flex-column align-items-center gap-4"
-            :image="classic"
+            :image="avatar.url"
             color="info"
-            @on-click="chooseImageEvent($event, classic)"/>
+            @on-click="chooseImageEvent($event, avatar.url)"/>
       </div>
     </div>
 
