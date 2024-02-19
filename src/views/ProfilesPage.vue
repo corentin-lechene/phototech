@@ -10,7 +10,7 @@ const router = useRouter();
 
 const profiles = ref<Required<Profile>[]>();
 const currentUser = useUserStore().currentUser;
-
+const currentProfile = useUserStore().currentProfile;
 
 onMounted(async () => {
   try {
@@ -27,7 +27,7 @@ function setProfile(profile: Required<Profile>) {
 </script>
 
 <template>
-  <BaseHeader close-button @on-close-button="$router.replace('/galleries')" />
+  <BaseHeader :close-button="!!currentProfile" @on-close-button="$router.replace('/galleries')" />
   <div class="flex flex-column align-items-center justify-content-center">
     <h1 class="font-bold">Choisissez votre profil</h1>
     <p class="font-medium m-0" style="letter-spacing: 0.075em;">
