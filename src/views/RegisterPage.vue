@@ -38,6 +38,10 @@ function onClickedSignUp() {
           errorMessage.value = "Veuillez accepter les conditions.";
         }
 
+        if(error.code === "auth/email-already-in-use") {
+          errorMessage.value = "Cet email a déjà été enregistré.";
+        }
+
         if(error.code === "auth/invalid-email") {
           mailErrorMessage.value = "Mauvais mail";
         }
