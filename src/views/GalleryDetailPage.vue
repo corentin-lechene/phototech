@@ -8,6 +8,7 @@ import {Picture} from "@/models";
 import {ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import {getFirebase} from "@/services/firebase.service";
 import {useUserStore} from "@/stores/user.store";
+import {v4 as uuidv4} from 'uuid';
 
 const { storage } = getFirebase;
 
@@ -65,8 +66,8 @@ async function onDelete(pictureId: string) {
   }
   const pictureRef = storageRef(storage, picture.url);
 
-  await deleteObject(pictureRef)
   try {
+    await deleteObject(pictureRef);
     await userService.deletePicture(currentUser.id, currentProfile.id, galleryId.value, pictureId);
     pictures.value = pictures.value.filter(p => p.id !== pictureId);
   } catch (error) {
@@ -94,7 +95,7 @@ async function onUpload(file: File) {
     return;
   }
 
-  const storageReference = storageRef(storage, `images/${currentUser.id}`);
+  const storageReference = storageRef(storage, `images/${currentUser.id}/${uuidv4()}`);
   try {
     const snapshot = await uploadBytes(storageReference, file);
     const downloadURL = await getDownloadURL(snapshot.ref);
