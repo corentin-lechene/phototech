@@ -1,35 +1,66 @@
-import {RouteRecordRaw} from "vue-router";
-import LoginPage from "@/views/LoginPage.vue"; //todo après ça sera profiles
+import {NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw} from "vue-router";
+import {useUserStore} from "@/stores/user.store";
+import ProfilesPage from "@/views/ProfilesPage.vue";
+import LoginPage from "@/views/LoginPage.vue";
+
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        redirect: "/login" //todo après ça sera profiles
+        redirect: "/profiles"
     },
     {
         path: "/login",
-        component: LoginPage
-    }
-    // {
-    //     path: "/register",
-    //     component: () => import("@/views/RegisterPage.vue")
-    // },
-    // {
-    //     path: "/onboarding",
-    //     component: () => import("@/views/Onboarding.vue")
-    // },
-    // {
-    //     path: "/profiles",
-    //     component: () => import("@/views/Profiles.vue")
-    // },
-    // {
-    //     path: "/galleries",
-    //     component: () => import("@/views/GalleriesPage.vue")
-    // },
-    //{
-    //     path: "/galleries/:galleryId",
-    //     component: () => import("@/views/GalleryDetail.vue")
-    // },
+        name: "login",
+        component: LoginPage,
+        beforeEnter: isAuthenticated
+    },
+    {
+        path: "/onboarding",
+        component: () => import("@/views/Onboarding.vue"),
+        beforeEnter: requiredAuth
+    },
+    {
+        path: "/register",
+        name: "register",
+        component: () => import("@/views/RegisterPage.vue"),
+        beforeEnter: isAuthenticated
+    },
+    {
+        path: "/profiles",
+        component: ProfilesPage,
+        beforeEnter: requiredAuth
+    },
+    {
+        path: "/galleries",
+        component: () => import("@/views/GalleriesPage.vue"),
+        beforeEnter: requiredAuth
+    },
+    {
+        path: "/galleries/:galleryId",
+        component: () => import("@/views/GalleryDetailPage.vue"),
+        beforeEnter: requiredAuth
+    },
 ];
+
+async function requiredAuth(_: RouteLocationNormalized, __: RouteLocationNormalized, next: NavigationGuardNext) {
+    const userStore = useUserStore();
+
+    if(!userStore.isLoggedIn) {
+        return next("/login");
+    }
+
+    return next();
+}
+
+async function isAuthenticated(_: RouteLocationNormalized, __: RouteLocationNormalized, next: NavigationGuardNext) {
+    const userStore = useUserStore();
+
+    if(userStore.isLoggedIn) {
+        return next("/profiles");
+    }
+
+    return next();
+}
 
 export default routes;

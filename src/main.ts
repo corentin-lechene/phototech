@@ -112,10 +112,15 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
+import {createPinia} from "pinia";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
 const app = createApp(App);
 
+app.use(pinia)
 app.use(PrimeVue, { ripple: true  });
 app.use(ConfirmationService);
 app.use(ToastService);
