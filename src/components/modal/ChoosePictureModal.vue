@@ -3,19 +3,33 @@ import ProfileAvatar from "@/components/profiles/ProfileAvatar.vue";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import {onMounted, ref} from "vue";
 import {AvatarService} from "@/services/avatar.service";
+import {v4 as uuidv4} from 'uuid';
+import {useUserStore} from "@/stores/user.store";
 
+const currentUser = useUserStore().currentUser;
 
 const avatars = ref<{name: string, url: string}[]>([]);
 const classics = [
-    "https://randomuser.me/api/portraits/thumb/women/30.jpg",
-    "https://randomuser.me/api/portraits/thumb/women/31.jpg",
-    "https://randomuser.me/api/portraits/thumb/women/32.jpg",
-    "https://randomuser.me/api/portraits/thumb/women/33.jpg",
-    "https://randomuser.me/api/portraits/thumb/women/34.jpg",
-    "https://randomuser.me/api/portraits/thumb/women/35.jpg",
-    "https://randomuser.me/api/portraits/thumb/women/36.jpg",
-    "https://randomuser.me/api/portraits/thumb/women/37.jpg",
+    "https://randomuser.me/api/portraits/women/0.jpg",
+    "https://randomuser.me/api/portraits/women/1.jpg",
+    "https://randomuser.me/api/portraits/women/2.jpg",
+    "https://randomuser.me/api/portraits/women/3.jpg",
+    "https://randomuser.me/api/portraits/men/0.jpg",
+    "https://randomuser.me/api/portraits/men/1.jpg",
+    "https://randomuser.me/api/portraits/men/2.jpg",
+    "https://randomuser.me/api/portraits/men/3.jpg",
 ];
+const legos = [
+  "https://randomuser.me/api/portraits/lego/0.jpg",
+  "https://randomuser.me/api/portraits/lego/1.jpg",
+  "https://randomuser.me/api/portraits/lego/2.jpg",
+  "https://randomuser.me/api/portraits/lego/3.jpg",
+  "https://randomuser.me/api/portraits/lego/4.jpg",
+  "https://randomuser.me/api/portraits/lego/5.jpg",
+  "https://randomuser.me/api/portraits/lego/6.jpg",
+  "https://randomuser.me/api/portraits/lego/7.jpg",
+  "https://randomuser.me/api/portraits/lego/8.jpg",
+]
 
 const fileInput = ref();
 const emit = defineEmits(['imageChoose']);
@@ -26,7 +40,7 @@ function triggerFileSelect() {
 
 async function onUpload(file: File){
   const storage = getStorage();
-  const storageReference = storageRef(storage, `avatars/newAvatar.jpg`); // Change the path as needed
+  const storageReference = storageRef(storage, `images/${currentUser.id}/${uuidv4()}`); // Change the path as needed
   try {
     const snapshot = await uploadBytes(storageReference, file);
     const downloadURL = await getDownloadURL(snapshot.ref);
@@ -55,7 +69,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-column gap-5 w-full h-full fixed px-8 ml-5">
+  <div class="flex flex-column gap-5 w-full h-full px-8 ml-5">
     <div class="flex flex-row w-full h-fit">
       <div class="flex-grow-1 pr-2">
         <h1>Choisir un avatar</h1>
@@ -69,7 +83,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="flex flex-column justify-content-around">
-      <h2>Classiques</h2>
+      <h2>Nos Avatars</h2>
       <div class = "flex justify-content-start gap-4">
         <ProfileAvatar
             v-for="avatar in avatars"
@@ -81,7 +95,7 @@ onMounted(async () => {
     </div>
 
     <div>
-      <h2>Cartoons</h2>
+      <h2>Classiques</h2>
       <div class = "flex justify-content-start gap-4">
         <ProfileAvatar
             v-for="classic in classics"
@@ -89,6 +103,18 @@ onMounted(async () => {
             :image="classic"
             color="info"
             @on-click="chooseImageEvent($event, classic)"/>
+      </div>
+    </div>
+
+    <div>
+      <h2>Légos</h2>
+      <div class = "flex justify-content-start gap-4">
+        <ProfileAvatar
+            v-for="lego in legos"
+            class="flex flex-column align-items-center gap-4"
+            :image="lego"
+            color="info"
+            @on-click="chooseImageEvent($event, lego)"/>
       </div>
     </div>
   </div>
