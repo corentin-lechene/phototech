@@ -78,9 +78,7 @@ function onSubmitNewProfile() {
           @on-click="openChoosePictureModal = true"
       />
     </div>
-  </div>
-  <div class="card flex justify-content-center">
-    <Dialog v-model:visible="openChoosePictureModal" modal dismissableMask contentClass="style-modal" :style="{ width: '95%', height: '100%', backgroundColor: '#202639'}">
+    <Dialog v-model:visible="openChoosePictureModal" modal contentClass="style-modal" :style="{ width: '95%', backgroundColor: '#202639'}">
       <template #header > Choisir un avatar </template>
       <ChoosePictureModal @imageChoose="handleImageChosen($event)"/>
     </Dialog>
